@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ViewState } from '@devexpress/dx-react-scheduler';
 import {
     Appointments,
-    AppointmentForm,
     DayView,
     MonthView,
     Scheduler,
@@ -12,25 +12,36 @@ import {
     ViewSwitcher,
     DateNavigator,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { Paper } from '@material-ui/core';
+import { Paper, Fab, makeStyles } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import moment from 'moment';
 
-const dummyData = [
-    {
-        _id: '5eba1f7833b9a19c110276ce',
-        title: 'Appointment',
-        startDate: '2020-06-03T20:25:43.511Z',
-        endDate: '2020-06-03T21:25:43.511Z',
-    },
-    {
-        _id: '5eba1f7833b9a19c110276cf',
-        title: 'Appointment',
-        startDate: '2020-06-03T18:25:43.511Z',
-        endDate: '2020-06-03T19:25:43.511Z',
-    },
-];
+import { handleDialog } from '../../actions/dialogsActions';
+import { AddReservationDialog } from '../AddReservation';
+import { Skeleton } from '@material-ui/lab';
 
-export default function Schedule() {
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(2),
+        right: theme.spacing(4),
+    },
+}));
+
+export const Schedule = () => {
+    const dispatch = useDispatch();
+
+    // reservation state
+    const reservationState = useSelector((state) => state.reservation);
+
+    // material-ui styles
+    const classes = useStyles();
+
     // set the view state of the scheduler component
     const [viewState, setViewState] = useState('week');
 
@@ -47,23 +58,53 @@ export default function Schedule() {
         setDate(newDate);
     };
 
+    // open reservation dialog
+    const handleOpenAddReservationDialog = () => {
+        dispatch(handleDialog({ addReservation: true }));
+    };
+
+    if (reservationState.loading) {
+        return <Skeleton variant="rect" height={250} />;
+    }
+
+    if (reservationState.error) {
+        return <p>Error</p>;
+    }
+
+    const formattedData = () => {
+        //TODO finish formatted data
+    };
+
     return (
-        <Paper>
-            <Scheduler data={dummyData}>
-                <ViewState
-                    currentViewName={viewState}
-                    onCurrentViewNameChange={handleViewChange}
-                    currentDate={date}
-                    onCurrentDateChange={handleDateChange}
-                />
-                <DayView name="day" />
-                <WeekView name="week" />
-                <MonthView name="month" />
-                <Toolbar />
-                <DateNavigator />
-                <ViewSwitcher />
-                <Appointments />
-            </Scheduler>
-        </Paper>
+        <>
+            <div className={classes.root}>
+                <Paper>
+                    <Scheduler data={reservationState.data}>
+                        <ViewState
+                            currentViewName={viewState}
+                            onCurrentViewNameChange={handleViewChange}
+                            currentDate={date}
+                            onCurrentDateChange={handleDateChange}
+                        />
+                        <DayView name="day" />
+                        <WeekView name="week" />
+                        <MonthView name="month" />
+                        <Toolbar />
+                        <DateNavigator />
+                        <ViewSwitcher />
+                        <Appointments />
+                    </Scheduler>
+                </Paper>
+                <Fab
+                    color="primary"
+                    className={classes.fab}
+                    id="add-resource-button"
+                    onClick={handleOpenAddReservationDialog}
+                >
+                    <AddIcon />
+                </Fab>
+            </div>
+            <AddReservationDialog />
+        </>
     );
-}
+};
