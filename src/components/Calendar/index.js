@@ -10,12 +10,16 @@ import {
     DateNavigator,
     AppointmentTooltip,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { Paper, Fab, makeStyles } from '@material-ui/core';
+import { Paper, Fab, IconButton, makeStyles, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Skeleton } from '@material-ui/lab';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 
 import { handleDialog } from '../../actions/dialogsActions';
+import { getInfo } from '../../actions/reservationActions';
+import api from '../../services/api';
 import { AddReservationDialog } from '../AddReservation';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +34,34 @@ const useStyles = makeStyles((theme) => ({
         right: theme.spacing(4),
     },
 }));
+
+const AppointmentTooltipHeaderComponent = ({
+    appointmentData,
+    ...restProps
+}) => {
+    const dispatch = useDispatch();
+    const deleteAppointment = async () => {
+        try {
+            await api.delete(`/reservations/${appointmentData._id}`);
+            dispatch(getInfo());
+        } catch (e) {
+            alert('Houve um erro ao deletar a reserva. Tente novamente');
+        }
+    };
+
+    return (
+        <AppointmentTooltip.Header {...restProps}>
+            {moment().isBefore(appointmentData.startDate) && (
+                <IconButton onClick={deleteAppointment}>
+                    <DeleteIcon />
+                </IconButton>
+            )}
+        </AppointmentTooltip.Header>
+    );
+};
+AppointmentTooltipHeaderComponent.propTypes = {
+    appointmentData: PropTypes.object.isRequired,
+};
 
 export const Schedule = () => {
     const dispatch = useDispatch();
@@ -86,17 +118,22 @@ export const Schedule = () => {
                         <Toolbar />
                         <DateNavigator />
                         <Appointments />
-                        <AppointmentTooltip />
+                        <AppointmentTooltip
+                            headerComponent={AppointmentTooltipHeaderComponent}
+                            showCloseButton
+                        />
                     </Scheduler>
                 </Paper>
-                <Fab
-                    color="primary"
-                    className={classes.fab}
-                    id="add-resource-button"
-                    onClick={handleOpenAddReservationDialog}
-                >
-                    <AddIcon />
-                </Fab>
+                <Tooltip title="Reservar recurso" placement="left">
+                    <Fab
+                        color="primary"
+                        className={classes.fab}
+                        id="add-resource-button"
+                        onClick={handleOpenAddReservationDialog}
+                    >
+                        <AddIcon />
+                    </Fab>
+                </Tooltip>
             </div>
             <AddReservationDialog />
         </>
