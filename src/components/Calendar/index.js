@@ -7,7 +7,6 @@ import {
     MonthView,
     Scheduler,
     Toolbar,
-    ViewSwitcher,
     DateNavigator,
     AppointmentTooltip,
 } from '@devexpress/dx-react-scheduler-material-ui';
@@ -54,14 +53,17 @@ export const Schedule = () => {
         dispatch(handleDialog({ addReservation: true }));
     };
 
+    // loading component
     if (reservationState.loading) {
         return <Skeleton variant="rect" height={250} />;
     }
 
+    // error component
     if (reservationState.error) {
         return <p>Error</p>;
     }
 
+    // format data to display correct title
     const formattedData = (reservation) => ({
         ...reservation,
         title: reservation.resource.name,
@@ -75,7 +77,7 @@ export const Schedule = () => {
         <>
             <div className={classes.root}>
                 <Paper>
-                    <Scheduler data={data}>
+                    <Scheduler data={data} locale={'pt-BR'}>
                         <ViewState
                             currentDate={date}
                             onCurrentDateChange={handleDateChange}
@@ -83,7 +85,6 @@ export const Schedule = () => {
                         <MonthView name="month" />
                         <Toolbar />
                         <DateNavigator />
-                        <ViewSwitcher />
                         <Appointments />
                         <AppointmentTooltip />
                     </Scheduler>
