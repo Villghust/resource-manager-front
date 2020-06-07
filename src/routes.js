@@ -1,12 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import MainPage from './pages/main';
-import { Toolbar } from './components/Toolbar';
-import { Users } from './pages/users';
 import { makeStyles } from '@material-ui/core';
+
+import { Toolbar } from './components/Toolbar';
 import useCheckSchedulerData from './hooks/useCheckSchedulerData';
 import useCheckUsers from './hooks/useCheckUsers';
+import MainPage from './pages/main';
+import { Users } from './pages/users';
 
 const useStyles = makeStyles((theme) => ({
     offset: theme.mixins.toolbar,

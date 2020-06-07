@@ -1,7 +1,7 @@
 import { types } from '../reducers/types';
 import api from '../services/api';
 
-export const getInfo = ({ filter }) => async (dispatch) => {
+export const getInfo = (filter) => async (dispatch) => {
     try {
         dispatch({ type: types.START_UPDATING_RESERVATIONS });
         if (filter === undefined) {
@@ -10,7 +10,7 @@ export const getInfo = ({ filter }) => async (dispatch) => {
         const response = await api.get(`/reservations?${filter}`);
         dispatch({
             type: types.FINISH_UPDATING_RESERVATIONS,
-            value: response.data.reservation,
+            value: response.data.reservations,
         });
     } catch (e) {
         dispatch({

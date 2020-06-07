@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -15,13 +15,13 @@ import {
 } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import { Form, Formik, Field, useFormikContext } from 'formik';
-
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import * as Yup from 'yup';
 
 import { handleDialog } from '../../actions/dialogsActions';
-import api from '../../services/api';
-import PropTypes from 'prop-types';
 import { getInfo } from '../../actions/reservationActions';
+import api from '../../services/api';
 
 // initial state
 const initialState = {
@@ -29,10 +29,29 @@ const initialState = {
     resourceType: '',
     startDate: null,
     endDate: null,
-    availableResources: null,
-    selectedResource: null,
-    userId: null,
+    availableResources: '',
+    selectedResource: '',
+    userId: '',
 };
+
+// formik validation schema
+const validationSchema = Yup.object().shape({
+    userId: Yup.string().required('É necessário selecionar um usuário'),
+    resourceType: Yup.string().required(
+        'É necessário definir um tipo de recurso'
+    ),
+    startDate: Yup.date('Uma data é necessária').required(
+        'É necessário definir uma data'
+    ),
+    endDate: Yup.date('Uma data é necessária').required(
+        'É necessário definir uma data'
+    ),
+    selectedResource: Yup.string().when('currentStep', {
+        is: 2,
+        then: Yup.string().required('É necessário selecionar um recurso'),
+        otherwise: Yup.string(),
+    }),
+});
 
 const UserSelection = ({ ...rest }) => {
     const { setFieldValue, values } = useFormikContext();
@@ -99,6 +118,12 @@ const ResourceSelection = ({ ...rest }) => {
             select
             value={values.selectedResource}
             onChange={handleChange}
+            disabled={values.availableResources.length === 0}
+            label={
+                values.availableResources.length === 0
+                    ? 'Não há recursos disponíveis'
+                    : 'Recursos disponíves'
+            }
             {...rest}
         >
             {values.availableResources.map((resource) => (
@@ -145,7 +170,7 @@ export const AddReservationDialog = () => {
 
     const checkAvailability = async (values, setFieldValue) => {
         const available = await api.get(
-            `/reservations/available?type=${
+            `/resources/available?type=${
                 values.resourceType
             }&startDate=${values.startDate.toISOString()}&endDate=${values.endDate.toISOString()}`
         );
@@ -154,30 +179,33 @@ export const AddReservationDialog = () => {
     };
 
     const submit = async (values) => {
-        await api.post('reservations', {
-            user_id: values.userId,
-            resource_id: values.selectedResource,
-            resource_type: values.resourceType,
-            startDate: values.startDate,
-            endDate: values.endDate,
-        });
-        handleClose();
-        dispatch(getInfo());
+        try {
+            await api.post('reservations', {
+                user_id: values.userId,
+                resource_id: values.selectedResource,
+                resource_type: values.resourceType,
+                startDate: values.startDate,
+                endDate: values.endDate,
+            });
+            dispatch(getInfo());
+            handleClose();
+        } catch (e) {
+            alert('Erro ao efetuar reserva');
+        }
     };
-
-    //TODO create validation schema
 
     return (
         <Dialog open={state} onClose={handleClose} fullScreen={fullScreen}>
             <Formik
                 initialValues={initialState}
+                validationSchema={validationSchema}
                 onSubmit={(values, { setFieldValue }) =>
                     values.currentStep === 1
                         ? checkAvailability(values, setFieldValue)
                         : submit(values)
                 }
             >
-                {({ values, isSubmitting }) => (
+                {({ values, isSubmitting, errors, touched }) => (
                     <Form>
                         <DialogTitle id="reservation-dialog-title">
                             Adicionar uma nova reserva
@@ -191,7 +219,14 @@ export const AddReservationDialog = () => {
                                         component={UserSelection}
                                         variant="outlined"
                                         label="Usuário"
+                                        error={
+                                            !!(touched.userId && errors.userId)
+                                        }
+                                        helperText={
+                                            touched.userId && errors.userId
+                                        }
                                         fullWidth
+                                        disabled={values.currentStep !== 1}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -201,7 +236,18 @@ export const AddReservationDialog = () => {
                                         component={ResourceType}
                                         variant="outlined"
                                         label="Tipo de recurso"
+                                        error={
+                                            !!(
+                                                touched.resourceType &&
+                                                errors.resourceType
+                                            )
+                                        }
+                                        helperText={
+                                            touched.resourceType &&
+                                            errors.resourceType
+                                        }
                                         fullWidth
+                                        disabled={values.currentStep !== 1}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -214,7 +260,18 @@ export const AddReservationDialog = () => {
                                         ampm={false}
                                         disablePast
                                         format="DD/MM/YYYY HH:mm"
+                                        error={
+                                            !!(
+                                                touched.startDate &&
+                                                errors.startDate
+                                            )
+                                        }
+                                        helperText={
+                                            touched.startDate &&
+                                            errors.startDate
+                                        }
                                         fullWidth
+                                        disabled={values.currentStep !== 1}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -227,6 +284,15 @@ export const AddReservationDialog = () => {
                                         ampm={false}
                                         disablePast
                                         format="DD/MM/YYYY HH:mm"
+                                        error={
+                                            !!(
+                                                touched.endDate &&
+                                                errors.endDate
+                                            )
+                                        }
+                                        helperText={
+                                            touched.endDate && errors.endDate
+                                        }
                                         fullWidth
                                         minDate={
                                             values.resourceType === 'furniture'
@@ -239,6 +305,7 @@ export const AddReservationDialog = () => {
                                                       'd'
                                                   )
                                         }
+                                        disabled={values.currentStep !== 1}
                                     />
                                 </Grid>
                                 {values.currentStep === 2 && (
@@ -247,7 +314,6 @@ export const AddReservationDialog = () => {
                                             name="selectedResource"
                                             id="selected-resource-field"
                                             variant="outlined"
-                                            label="Recursos disponíves"
                                             component={ResourceSelection}
                                             fullWidth
                                         />
@@ -259,15 +325,26 @@ export const AddReservationDialog = () => {
                             <Button onClick={handleClose} color="primary">
                                 Cancelar
                             </Button>
-                            <Button
-                                type="submit"
-                                color="primary"
-                                disabled={isSubmitting}
-                            >
-                                {values.currentStep === 1
-                                    ? 'Procurar recursos disponíveis'
-                                    : 'Reservar recurso'}
-                            </Button>
+                            {values.currentStep === 1 && (
+                                <Button
+                                    type="submit"
+                                    color="primary"
+                                    disabled={isSubmitting}
+                                >
+                                    Procurar recursos disponíveis
+                                </Button>
+                            )}
+                            {values.currentStep === 2 && (
+                                <Button
+                                    type="submit"
+                                    color="primary"
+                                    disabled={
+                                        isSubmitting || !values.selectedResource
+                                    }
+                                >
+                                    Reservar recurso
+                                </Button>
+                            )}
                         </DialogActions>
                     </Form>
                 )}

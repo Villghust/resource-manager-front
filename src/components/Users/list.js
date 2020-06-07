@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
     Divider,
     List,
@@ -7,12 +8,13 @@ import {
     ListItemText,
     Paper,
 } from '@material-ui/core';
-import useApiRequest from '../../hooks/useApiRequest';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import EmailIcon from '@material-ui/icons/Email';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/core/styles';
-import {Skeleton} from "@material-ui/lab"
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import EmailIcon from '@material-ui/icons/Email';
+import { Skeleton } from '@material-ui/lab';
+
+import useApiRequest from '../../hooks/useApiRequest';
 
 const useStyles = makeStyles({
     root: {
@@ -26,9 +28,7 @@ export const ListUsers = () => {
     const { data, loading, error } = useApiRequest(true, '/users');
 
     if (loading) {
-        return (
-            <Skeleton variant="rect" height={250} />
-        );
+        return <Skeleton variant="rect" height={250} />;
     }
 
     return (

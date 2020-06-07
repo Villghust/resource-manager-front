@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { Container, Grid, Icon, Typography } from '@material-ui/core';
-import { ListUsers } from '../../components/Users/list';
-import PeopleIcon from '@material-ui/icons/People';
 import { makeStyles } from '@material-ui/core/styles';
+import PeopleIcon from '@material-ui/icons/People';
+
+import { ListUsers } from '../../components/Users/list';
 
 const useStyles = makeStyles({
     icon: {
