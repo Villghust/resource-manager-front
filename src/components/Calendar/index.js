@@ -10,10 +10,19 @@ import {
     DateNavigator,
     AppointmentTooltip,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { Paper, Fab, IconButton, makeStyles, Tooltip } from '@material-ui/core';
+import {
+    Grid,
+    Paper,
+    Fab,
+    IconButton,
+    makeStyles,
+    Tooltip,
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Skeleton } from '@material-ui/lab';
+import currency from 'currency.js';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
@@ -60,6 +69,30 @@ const AppointmentTooltipHeaderComponent = ({
     );
 };
 AppointmentTooltipHeaderComponent.propTypes = {
+    appointmentData: PropTypes.object.isRequired,
+};
+
+const AppointmentTooltipContentComponent = ({
+    appointmentData,
+    ...restProps
+}) => (
+    <AppointmentTooltip.Content
+        {...restProps}
+        appointmentData={appointmentData}
+    >
+        <Grid container alignItems="center">
+            <Grid item xs={2} style={{ textAlign: 'center' }}>
+                <AttachMoneyIcon />
+            </Grid>
+            <Grid item xs={10}>
+                <span>
+                    {currency(appointmentData.total_cost).divide(100).format()}
+                </span>
+            </Grid>
+        </Grid>
+    </AppointmentTooltip.Content>
+);
+AppointmentTooltipContentComponent.propTypes = {
     appointmentData: PropTypes.object.isRequired,
 };
 
@@ -120,6 +153,9 @@ export const Schedule = () => {
                         <Appointments />
                         <AppointmentTooltip
                             headerComponent={AppointmentTooltipHeaderComponent}
+                            contentComponent={
+                                AppointmentTooltipContentComponent
+                            }
                             showCloseButton
                         />
                     </Scheduler>
