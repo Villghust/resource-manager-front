@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Container, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import StyleIcon from '@material-ui/icons/Style';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 
-import { ListResources } from '../../components/Resources';
+import { ReportsList } from '../../components/Reports';
 
 const useStyles = makeStyles({
     icon: {
@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     },
 });
 
-export const Resources = () => {
+export const Reports = () => {
     const classes = useStyles();
 
     return (
@@ -23,16 +23,16 @@ export const Resources = () => {
                     <Grid container spacing={2} alignItems="center">
                         <Grid item>
                             <div className={classes.icon}>
-                                <StyleIcon />
+                                <AssessmentIcon />
                             </div>
                         </Grid>
                         <Grid item>
-                            <Typography variant="h5">Recursos</Typography>
+                            <Typography variant="h5">Relatórios</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                    <ListResources />
+                    <ReportsList />
                 </Grid>
             </Grid>
         </Container>

@@ -7,6 +7,7 @@ import { Toolbar } from './components/Toolbar';
 import useCheckSchedulerData from './hooks/useCheckSchedulerData';
 import useCheckUsers from './hooks/useCheckUsers';
 import MainPage from './pages/main';
+import { Reports } from './pages/reports';
 import { Resources } from './pages/resources';
 import { Users } from './pages/users';
 
@@ -43,6 +44,9 @@ export default function Routes() {
                     </Route>
                     <Route exact path="/resources">
                         <Resources />
+                    </Route>
+                    <Route exact path="/reports">
+                        <Reports />
                     </Route>
                 </Switch>
             </main>

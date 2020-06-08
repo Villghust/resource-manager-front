@@ -43,6 +43,11 @@ export const Toolbar = () => {
                             Recursos
                         </Typography>
                     </Link>
+                    <Link to="/reports">
+                        <Typography variant="h6" className={classes.link}>
+                            Relatórios
+                        </Typography>
+                    </Link>
                 </MuiToolbar>
             </AppBar>
         </div>
