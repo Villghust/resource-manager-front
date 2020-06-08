@@ -4,7 +4,7 @@ import { Container, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PeopleIcon from '@material-ui/icons/People';
 
-import { ListUsers } from '../../components/Users/list';
+import { ListResources } from '../../components/Resources';
 
 const useStyles = makeStyles({
     icon: {
@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     },
 });
 
-export const Users = () => {
+export const Resources = () => {
     const classes = useStyles();
 
     return (
@@ -27,12 +27,12 @@ export const Users = () => {
                             </div>
                         </Grid>
                         <Grid item>
-                            <Typography variant="h5">Colaboradores</Typography>
+                            <Typography variant="h5">Recursos</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                    <ListUsers />
+                    <ListResources />
                 </Grid>
             </Grid>
         </Container>

@@ -7,6 +7,7 @@ import { Toolbar } from './components/Toolbar';
 import useCheckSchedulerData from './hooks/useCheckSchedulerData';
 import useCheckUsers from './hooks/useCheckUsers';
 import MainPage from './pages/main';
+import { Resources } from './pages/resources';
 import { Users } from './pages/users';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +40,9 @@ export default function Routes() {
                     </Route>
                     <Route exact path="/users">
                         <Users />
+                    </Route>
+                    <Route exact path="/resources">
+                        <Resources />
                     </Route>
                 </Switch>
             </main>

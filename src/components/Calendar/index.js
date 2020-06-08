@@ -12,6 +12,7 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui';
 import {
     Grid,
+    Icon,
     Paper,
     Fab,
     IconButton,
@@ -21,6 +22,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PersonIcon from '@material-ui/icons/Person';
 import { Skeleton } from '@material-ui/lab';
 import currency from 'currency.js';
 import moment from 'moment';
@@ -81,6 +83,21 @@ const AppointmentTooltipContentComponent = ({
         appointmentData={appointmentData}
     >
         <Grid container alignItems="center">
+            <Grid item xs={2} style={{ textAlign: 'center' }}>
+                <PersonIcon />
+            </Grid>
+            <Grid item xs={10}>
+                <span>{appointmentData.user.name}</span>
+            </Grid>
+            <Grid item xs={2} style={{ textAlign: 'center' }}>
+                <Icon
+                    className="far fa-id-badge"
+                    style={{ textAlign: 'center' }}
+                />
+            </Grid>
+            <Grid item xs={10}>
+                <span>{appointmentData.user.registration}</span>
+            </Grid>
             <Grid item xs={2} style={{ textAlign: 'center' }}>
                 <AttachMoneyIcon />
             </Grid>

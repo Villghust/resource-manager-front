@@ -31,6 +31,10 @@ export const ListUsers = () => {
         return <Skeleton variant="rect" height={250} />;
     }
 
+    if (error) {
+        return <p>Erro</p>;
+    }
+
     return (
         <Paper>
             <List component="nav">
