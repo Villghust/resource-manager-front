@@ -40,12 +40,12 @@ const validationSchema = Yup.object().shape({
     resourceType: Yup.string().required(
         'É necessário definir um tipo de recurso'
     ),
-    startDate: Yup.date('Uma data é necessária').required(
-        'É necessário definir uma data'
-    ),
-    endDate: Yup.date('Uma data é necessária').required(
-        'É necessário definir uma data'
-    ),
+    startDate: Yup.date('Uma data é necessária')
+        .required('É necessário definir uma data')
+        .nullable(),
+    endDate: Yup.date('Uma data é necessária')
+        .required('É necessário definir uma data')
+        .nullable(),
     selectedResource: Yup.string().when('currentStep', {
         is: 2,
         then: Yup.string().required('É necessário selecionar um recurso'),

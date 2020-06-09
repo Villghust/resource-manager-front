@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render correctly with no props 1`] = `
+<div>
+  <div
+    className="makeStyles-root-3"
+  >
+    <header
+      className="MuiPaper-root MuiAppBar-root MuiAppBar-positionFixed MuiAppBar-colorPrimary mui-fixed MuiPaper-elevation4"
+    >
+      <div
+        className="MuiToolbar-root MuiToolbar-regular makeStyles-toolbar-5 MuiToolbar-gutters"
+      >
+        <a
+          className="makeStyles-root-6"
+          href="/"
+          onClick={[Function]}
+        >
+          <h6
+            className="MuiTypography-root makeStyles-link-4 MuiTypography-h6"
+          >
+            Agenda
+          </h6>
+        </a>
+        <a
+          className="makeStyles-root-6"
+          href="/users"
+          onClick={[Function]}
+        >
+          <h6
+            className="MuiTypography-root makeStyles-link-4 MuiTypography-h6"
+          >
+            Colaboradores
+          </h6>
+        </a>
+        <a
+          className="makeStyles-root-6"
+          href="/resources"
+          onClick={[Function]}
+        >
+          <h6
+            className="MuiTypography-root makeStyles-link-4 MuiTypography-h6"
+          >
+            Recursos
+          </h6>
+        </a>
+        <a
+          className="makeStyles-root-6"
+          href="/reports"
+          onClick={[Function]}
+        >
+          <h6
+            className="MuiTypography-root makeStyles-link-4 MuiTypography-h6"
+          >
+            Relatórios
+          </h6>
+        </a>
+      </div>
+    </header>
+  </div>
+  <main
+    className="makeStyles-content-2"
+  >
+    <div
+      className="makeStyles-offset-1"
+    />
+    <div
+      className="MuiContainer-root MuiContainer-maxWidthLg"
+    >
+      <span
+        className="MuiSkeleton-root MuiSkeleton-rect MuiSkeleton-pulse"
+        style={
+          Object {
+            "height": 250,
+            "width": undefined,
+          }
+        }
+      />
+    </div>
+  </main>
+</div>
+`;
