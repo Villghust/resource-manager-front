@@ -10,21 +10,24 @@ import store from './providers/Store';
 import Routes from './routes';
 import 'moment/locale/pt-br';
 import theme from './styles/muiTheme';
+import ErrorBoundary from './components/Error';
 
 moment.locale('pt-br');
 
 function App() {
     return (
-        <MuiPickersUtilsProvider utils={MomentUtils} locale="pt-BR">
-            <ThemeProvider theme={theme}>
-                <Provider store={store}>
-                    <div>
-                        <CssBaseline />
-                        <Routes />
-                    </div>
-                </Provider>
-            </ThemeProvider>
-        </MuiPickersUtilsProvider>
+        <ErrorBoundary>
+            <MuiPickersUtilsProvider utils={MomentUtils} locale="pt-BR">
+                <ThemeProvider theme={theme}>
+                    <Provider store={store}>
+                        <div>
+                            <CssBaseline />
+                            <Routes />
+                        </div>
+                    </Provider>
+                </ThemeProvider>
+            </MuiPickersUtilsProvider>
+        </ErrorBoundary>
     );
 }
 
