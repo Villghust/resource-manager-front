@@ -4,6 +4,7 @@ services:
 
   resource-manager-front:
     container_name: resource-manager-front
+    image: resource-manager-front
     build:
       context: .
       dockerfile: Dockerfile
