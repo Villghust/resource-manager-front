@@ -11,3 +11,5 @@ Irá instalar todas dependências do projeto.
 ```yarn start```
 
 Irá executar o frontend, disponibilizando-o em `localhost:3000`
+
+É possível utilizar o script `sh exec.sh`. Este script necessita ter o docker instalado para rodar. Através do script, o projeto é executado automaticamente através de dois containers do docker.
